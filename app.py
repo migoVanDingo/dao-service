@@ -21,7 +21,7 @@ def create_app():
     app.config['MYSQL_DB'] = 'pipeline_dao'
 
     # Register blueprints (if any)
-    app.register_blueprint(crud_api)
+    app.register_blueprint(crud_api, url_prefix='/api')
 
     return app
 
