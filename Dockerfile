@@ -2,8 +2,7 @@
 FROM python:3.9-slim-bullseye
 
 # Install system dependencies (No longer need libmysqlclient-dev)
-RUN apt-get update --allow-releaseinfo-change && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
     gnupg \
     dirmngr \
     python3-dev \
