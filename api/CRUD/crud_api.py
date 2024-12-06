@@ -28,7 +28,8 @@ def create():
     request_id = data['request_id']
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
     try:
-        response = DAO.insert(service, table_name, data=payload)
+        dao = DAO()
+        response = dao.insert(service, table_name, data=payload)
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
@@ -50,7 +51,8 @@ def read():
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
     try:
-        response = DAO.read(table_name, filters)
+        dao = DAO()
+        response = dao.read(table_name, filters)
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
@@ -74,7 +76,8 @@ def read_list():
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
     try:
-        response = DAO.read_list(table_name, field, value)
+        dao = DAO()
+        response = dao.read_list(table_name, field, value)
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
@@ -102,7 +105,8 @@ def update():
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
     try:
-        response = DAO.update(table_name, key, value, data)
+        dao = DAO()
+        response = dao.update(table_name, key, value, data)
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
@@ -126,7 +130,8 @@ def delete():
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
     try:
-        response = DAO.delete(table_name, Utils.get_id_field(service), id)
+        dao = DAO()
+        response = dao.delete(table_name, Utils.get_id_field(service), id)
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
