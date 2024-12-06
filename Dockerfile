@@ -4,6 +4,13 @@ FROM python:3.9-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libmysqlclient-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the current directory contents into the container
 COPY . /app
 

@@ -7,8 +7,7 @@ class DAO:
     def insert(self, service: str, table_name: str, data: dict):
         """ Insert data into a table """
         data[service] = Utils.generate_id(data['service'])
-        data['created_at'] = Utils.date_time()
-        data['create_epoch'] = Utils.date_time_epoch()
+
         columns = ', '.join(data.keys())
         values = ', '.join(['%s'] * len(data))  # Prepare for parameterized query
         sql = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
