@@ -3,6 +3,8 @@ import os
 from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 import mysql.connector  # Import mysql.connector
+from dotenv import load_dotenv
+load_dotenv()
 
 from api.CRUD.crud_api import crud_api
 from utility.error import ThrowError
@@ -16,7 +18,7 @@ def create_app():
     CORS(app)
 
     # MySQL configurations
-    app.config['MYSQL_HOST'] = 'localhost'
+    app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost') 
     app.config['MYSQL_USER'] = 'dao_user'
     app.config['MYSQL_PASSWORD'] = 'dao_password_2024'
     app.config['MYSQL_DB'] = 'pipeline_dao'
