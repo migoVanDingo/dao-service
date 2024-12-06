@@ -1,22 +1,24 @@
+# Base image
 FROM python:3.9-slim-bullseye
 
-WORKDIR /app
-
-# Fixing repository signature errors by using trusted repositories
+# Install system dependencies
 RUN apt-get update --allow-releaseinfo-change && \
     apt-get install -y --no-install-recommends \
-    gnupg dirmngr && \
-    echo "deb [trusted=yes] http://deb.debian.org/debian bullseye main" > /etc/apt/sources.list && \
-    echo "deb [trusted=yes] http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list && \
-    echo "deb [trusted=yes] http://deb.debian.org/debian bullseye-updates main" >> /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gcc libmysqlclient-dev pkg-config && \
-    rm -rf /var/lib/apt/lists/*
+    gnupg \
+    dirmngr \
+    libmysqlclient-dev \
+    python3-dev \
+    gcc \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . /app
-
+# Install Python dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Set work directory
+WORKDIR /app
+
 
 EXPOSE 5010
 
