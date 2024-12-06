@@ -4,21 +4,22 @@ FROM python:3.9-slim
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Update GPG keys and install system dependencies
+RUN apt-get update --allow-releaseinfo-change && \
+    apt-get install -y --no-install-recommends \
+    gnupg \
+    dirmngr && \
+    apt-key adv --fetch-keys http://ftp-master.debian.org/keys/archive-key-12.asc && \
+    apt-key adv --fetch-keys http://ftp-master.debian.org/keys/archive-key-12-security.asc && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
     gcc \
     libmysqlclient-dev \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/*
+    pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the current directory contents into the container
 COPY . /app
 
 # Install the required Python packages
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Expose the port that Flask will run on
-EXPOSE 5010
-
-# Command to run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5010"]
+RUN pip install --no-cache-dir -r require
