@@ -28,7 +28,7 @@ def create():
     request_id = data['request_id']
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
     try:
-        response = DAO.insert(service, table_name, payload)
+        response = DAO.insert(service, table_name, data=payload)
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
