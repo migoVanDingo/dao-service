@@ -1,3 +1,4 @@
+from flask import current_app
 import mysql.connector
 from utility.utils import Utils
 
@@ -19,11 +20,13 @@ class DAO:
 
     def insert(self, service: str, table_name: str, data: dict):
         """ Insert data into a table """
-        data[service] = Utils.generate_id(service)
+        data[f"{Utils.get_id_field(service)}"] = Utils.generate_id(service)
 
         columns = ', '.join(data.keys())
         values = ', '.join(['%s'] * len(data))  # Prepare for parameterized query
         sql = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
+
+        current_app.logger.info(f"INSERT: {sql}")
         
         conn = self.get_db_connection()
         cursor = conn.cursor()
@@ -32,6 +35,7 @@ class DAO:
             conn.commit()
             return data
         except Exception as e:
+            current_app.logger.error(f"INSERT ERROR: {e}")
             conn.rollback()
             raise e
         finally:
