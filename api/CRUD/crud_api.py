@@ -14,6 +14,11 @@ class ICreate:
     payload: dict
     request_id: str
 
+# Get API Health Check
+@crud_api.route('/health', methods=['GET'])
+def health():
+    return {"status": "ok"}, 200
+
 @crud_api.route('/create', methods=['POST'])
 def create():
     data: ICreate = json.loads(request.data)
