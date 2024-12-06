@@ -19,6 +19,7 @@ def create_app():
     app.config['MYSQL_USER'] = 'dao_user'
     app.config['MYSQL_PASSWORD'] = 'dao_password_2024'
     app.config['MYSQL_DB'] = 'pipeline_dao'
+    app.config['MYSQL_PORT'] = 3307
 
     # Register blueprints (if any)
     app.register_blueprint(crud_api, url_prefix='/api')
@@ -31,7 +32,8 @@ def get_db_connection():
         host=app.config['MYSQL_HOST'],
         user=app.config['MYSQL_USER'],
         password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DB']
+        database=app.config['MYSQL_DB'],
+        port=app.config['MYSQL_PORT']
     )
     return conn
 
