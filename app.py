@@ -19,10 +19,10 @@ def create_app():
 
     # MySQL configurations
     app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost') 
-    app.config['MYSQL_USER'] = 'dao_user'
-    app.config['MYSQL_PASSWORD'] = 'dao_password_2024'
-    app.config['MYSQL_DB'] = 'pipeline_dao'
-    app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
+    app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'app_user')
+    app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'app_password')
+    app.config['MYSQL_DB'] = os.getenv('MYSQL_DB', 'app_db')
+    app.config['MYSQL_PORT'] = os.getenv('MYSQL_PORT', 3306)
 
     # Register blueprints (if any)
     app.register_blueprint(crud_api, url_prefix='/api')
