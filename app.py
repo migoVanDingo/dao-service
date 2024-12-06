@@ -3,6 +3,7 @@ from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 import mysql.connector  # Import mysql.connector
 
+from api.CRUD.crud_api import crud_api
 from utility.error import ThrowError
 
 
@@ -20,6 +21,7 @@ def create_app():
     app.config['MYSQL_DB'] = 'pipeline_dao'
 
     # Register blueprints (if any)
+    app.register_blueprint(crud_api)
 
     return app
 
