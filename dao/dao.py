@@ -1,19 +1,20 @@
 import mysql.connector
 from utility.utils import Utils
-from app import app  # Assuming app instance is created in app.py
+
 
 class DAO:
     def __init__(self):
         # Removed db reference, now using direct connection management
-        pass
+        from app import app  # Assuming app instance is created in app.py
+        self.app = app
 
     def get_db_connection(self):
         """ Returns a database connection object """
         return mysql.connector.connect(
-            host=app.config['MYSQL_HOST'],
-            user=app.config['MYSQL_USER'],
-            password=app.config['MYSQL_PASSWORD'],
-            database=app.config['MYSQL_DB']
+            host=self.app.config['MYSQL_HOST'],
+            user=self.app.config['MYSQL_USER'],
+            password=self.app.config['MYSQL_PASSWORD'],
+            database=self.app.config['MYSQL_DB']
         )
 
     def insert(self, service: str, table_name: str, data: dict):
