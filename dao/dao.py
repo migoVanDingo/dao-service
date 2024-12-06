@@ -19,7 +19,7 @@ class DAO:
 
     def insert(self, service: str, table_name: str, data: dict):
         """ Insert data into a table """
-        data[service] = Utils.generate_id(data['service'])
+        data[service] = Utils.generate_id(service)
 
         columns = ', '.join(data.keys())
         values = ', '.join(['%s'] * len(data))  # Prepare for parameterized query
