@@ -1,55 +1,132 @@
-import logging
-from flask import Flask, jsonify, make_response, request
-from flask_cors import CORS
-import mysql.connector  # Import mysql.connector
+import traceback
+from flask import Blueprint, current_app, json, request
 
+from dao.dao import DAO
 from utility.error import ThrowError
+from utility.utils import Utils
+
+crud_api = Blueprint('crud_api', __name__)
 
 
-logging.basicConfig(filename='record.log',
-                level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(lineno)d | \n %(message)-20s')
+class ICreate:
+    table_name: str
+    service: str
+    payload: dict
+    request_id: str
 
-def create_app():
-    app = Flask(__name__)
-    CORS(app)
+@crud_api.route('/create', methods=['POST'])
+def create():
+    data: ICreate = json.loads(request.data)
+    table_name = data['table_name']
+    service = data['service']
+    payload = data['payload']
+    request_id = data['request_id']
+    current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
+    try:
+        response = DAO.insert(service, table_name, payload)
+        return response, 200
+    except Exception as e:
+        current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
+        raise ThrowError("Failed to create record", 500)
+    
+class IRead:
+    table_name: str
+    service: str
+    filters: dict
+    request_id: str
 
-    # MySQL configurations
-    app.config['MYSQL_HOST'] = 'localhost'
-    app.config['MYSQL_USER'] = 'dao_user'
-    app.config['MYSQL_PASSWORD'] = 'dao_password_2024'
-    app.config['MYSQL_DB'] = 'pipeline_dao'
+@crud_api.route('/read', methods=['POST'])
+def read():
+    data: IRead = json.loads(request.data)
+    table_name = data['table_name']
+    filters = data['filters']
+    request_id = data['request_id']
+    service = data['service']
+    current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
-    # Register blueprints (if any)
+    try:
+        response = DAO.read(table_name, filters)
+        return response, 200
+    except Exception as e:
+        current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
+        raise ThrowError("Failed to read record", 500)
+    
+class IReadList:
+    table_name: str
+    service: str
+    field: str
+    value: str
+    request_id: str
 
-    return app
+@crud_api.route('/read_list', methods=['POST'])
+def read_list():
+    data: IReadList = json.loads(request.data)
+    table_name = data['table_name']
+    field = data['field']
+    value = data['value']
+    request_id = data['request_id']
+    service = data['service']
+    current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
-# Function to get database connection using mysql.connector
-def get_db_connection():
-    conn = mysql.connector.connect(
-        host=app.config['MYSQL_HOST'],
-        user=app.config['MYSQL_USER'],
-        password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DB']
-    )
-    return conn
+    try:
+        response = DAO.read_list(table_name, field, value)
+        return response, 200
+    except Exception as e:
+        current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
+        raise ThrowError("Failed to read list", 500)
+    
 
 
-app = create_app()
+class IUpdate:
+    table_name: str
+    service: str
+    key: str
+    value: str
+    data: dict
+    request_id: str
 
-@app.before_request
-def handle_options():
-    if request.method == 'OPTIONS':
-        response = make_response('success', 200)
-        response.headers['Access-Control-Allow-Headers'] = '*'
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Content-Type'] = '*'
-        return response
+@crud_api.route('/update', methods=['POST'])
+def update():
+    data: IUpdate = json.loads(request.data)
+    table_name = data['table_name']
+    key = data['key']
+    value = data['value']
+    data = data['data']
+    request_id = data['request_id']
+    service = data['service']
+    current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
-@app.errorhandler(ThrowError)
-def handle_throw_error(error):
-    response = jsonify({
-        "message": str(error),
-        "error_code": error.status_code
-    })
-    response.status_code = error.status_code
-    return response
+    try:
+        response = DAO.update(table_name, key, value, data)
+        return response, 200
+    except Exception as e:
+        current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
+        raise ThrowError("Failed to update record", 500)
+
+
+
+class IDelete:
+    table_name: str
+    service: str
+    id: str
+    request_id: str
+
+@crud_api.route('/delete', methods=['POST'])
+def delete():
+    data: IDelete = json.loads(request.data)
+    table_name = data['table_name']
+    id = data['id']
+    request_id = data['request_id']
+    service = data['service']
+    current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
+
+    try:
+        response = DAO.delete(table_name, Utils.get_id_field(service), id)
+        return response, 200
+    except Exception as e:
+        current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
+        raise ThrowError("Failed to delete record", 500)
+
+
+
+
