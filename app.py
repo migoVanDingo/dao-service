@@ -1,7 +1,7 @@
 import logging
 from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
-from flask_mysqldb import MySQL
+import mysql.connector  # Import mysql.connector
 
 from utility.error import ThrowError
 
@@ -18,21 +18,23 @@ def create_app():
     app.config['MYSQL_USER'] = 'dao_user'
     app.config['MYSQL_PASSWORD'] = 'dao_password_2024'
     app.config['MYSQL_DB'] = 'pipeline_dao'
-    app.config['MYSQL_CURSORCLASS'] = 'DictCursor' 
 
-    #Register blueprints
-
+    # Register blueprints (if any)
 
     return app
 
-def init_db(app):
-    db = MySQL()
-    db.init_app(app)
-    return db
+# Function to get database connection using mysql.connector
+def get_db_connection():
+    conn = mysql.connector.connect(
+        host=app.config['MYSQL_HOST'],
+        user=app.config['MYSQL_USER'],
+        password=app.config['MYSQL_PASSWORD'],
+        database=app.config['MYSQL_DB']
+    )
+    return conn
 
 
 app = create_app()
-db = init_db(app)
 
 @app.before_request
 def handle_options():
