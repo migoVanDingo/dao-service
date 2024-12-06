@@ -1,4 +1,5 @@
 import logging
+import os
 from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 import mysql.connector  # Import mysql.connector
@@ -19,7 +20,7 @@ def create_app():
     app.config['MYSQL_USER'] = 'dao_user'
     app.config['MYSQL_PASSWORD'] = 'dao_password_2024'
     app.config['MYSQL_DB'] = 'pipeline_dao'
-    app.config['MYSQL_PORT'] = 3307
+    app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
 
     # Register blueprints (if any)
     app.register_blueprint(crud_api, url_prefix='/api')
