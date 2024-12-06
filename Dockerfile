@@ -2,12 +2,10 @@ FROM python:3.9-slim-bullseye
 
 WORKDIR /app
 
-# Add commands to update repository keys and handle invalid signatures
+# Fixing repository signature errors by using trusted repositories
 RUN apt-get update --allow-releaseinfo-change && \
     apt-get install -y --no-install-recommends \
     gnupg dirmngr && \
-    apt-key adv --fetch-keys http://ftp-master.debian.org/keys/archive-key-11.asc && \
-    apt-key adv --fetch-keys http://ftp-master.debian.org/keys/archive-key-12.asc && \
     echo "deb [trusted=yes] http://deb.debian.org/debian bullseye main" > /etc/apt/sources.list && \
     echo "deb [trusted=yes] http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list && \
     echo "deb [trusted=yes] http://deb.debian.org/debian bullseye-updates main" >> /etc/apt/sources.list && \
