@@ -71,15 +71,14 @@ class IReadList:
 def read_list():
     data: IReadList = json.loads(request.data)
     table_name = data['table_name']
-    field = data['field']
-    value = data['value']
+    filters = data['filters']
     request_id = data['request_id']
     service = data['service']
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
 
     try:
         dao = DAO()
-        response = dao.read_list(table_name, field, value)
+        response = dao.read_list(table_name, filters)
         return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
