@@ -55,13 +55,14 @@ class DAO:
         conn.close()
         return result
 
-    def read_list(self, table_name, field, value):
+    def read_list(self, table_name, filters):
         """ Get all records based on a field and its value """
-        sql = f"SELECT * FROM {table_name} WHERE {field} = %s"
-        
+        conditions = ' AND '.join([f"{key} = %s" for key in filters.keys()])
+        sql = f"SELECT * FROM {table_name} WHERE {conditions}"
+
         conn = self.get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(sql, (value,))
+        cursor = conn.cursor(dictionary=True)  # Use dictionary cursor for readable results
+        cursor.execute(sql, tuple(filters.values()))
         results = cursor.fetchall()  # Fetch all rows
         cursor.close()
         conn.close()

@@ -63,8 +63,7 @@ def read():
 class IReadList:
     table_name: str
     service: str
-    field: str
-    value: str
+    filters: dict
     request_id: str
 
 @crud_api.route('/read_list', methods=['POST'])
