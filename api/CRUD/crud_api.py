@@ -102,7 +102,6 @@ def update():
     table_name = data['table_name']
     key = data['key']
     value = data['value']
-    data = data['data']
     request_id = data['request_id']
     service = data['service']
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
