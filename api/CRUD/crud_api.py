@@ -78,6 +78,7 @@ def read_list():
     try:
         dao = DAO()
         response = dao.read_list(table_name, filters)
+        current_app.logger.info(f"{request_id} --- {__name__} --- READ LIST RESPONSE: {response}")
         return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
