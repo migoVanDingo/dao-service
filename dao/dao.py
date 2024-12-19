@@ -60,6 +60,7 @@ class DAO:
         conditions = ' AND '.join([f"{key} = %s" for key in filters.keys()])
         sql = f"SELECT * FROM {table_name} WHERE {conditions}"
         current_app.logger.info(f"READ LIST QUERY: {sql}")
+        current_app.logger.info(f"READ LIST FILTERS: {filters.values()}")
         conn = self.get_db_connection()
         cursor = conn.cursor(dictionary=True)  # Use dictionary cursor for readable results
         cursor.execute(sql, tuple(filters.values()))
