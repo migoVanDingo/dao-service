@@ -21,13 +21,14 @@ def health():
 
 @crud_api.route('/create', methods=['POST'])
 def create():
-    print(f"request.data: {request.data}")
+   
     data: ICreate = json.loads(request.data)
     table_name = data['table_name']
     service = data['service']
     payload = data['payload']
     request_id = data['request_id']
     current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service}")
+    current_app.logger.info(f"service: {service} --- table_name: {table_name} --- payload: {payload} --- request_id: {request_id}")
     try:
         dao = DAO()
         response = dao.insert(service, table_name, data=payload)
