@@ -98,6 +98,7 @@ class IUpdate:
 @crud_api.route('/update', methods=['POST'])
 def update():
     data: IUpdate = json.loads(request.data)
+    current_app.logger.info(f"Update Data: {data}")
     table_name = data['table_name']
     key = data['key']
     value = data['value']
