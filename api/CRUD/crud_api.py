@@ -21,7 +21,8 @@ def health():
 
 @crud_api.route('/create', methods=['POST'])
 def create():
-    data = json.loads(request.data)
+    print(f"request.data: {request.data}")
+    data: ICreate = json.loads(request.data)
     table_name = data['table_name']
     service = data['service']
     payload = data['payload']
@@ -43,7 +44,7 @@ class IRead:
 
 @crud_api.route('/read', methods=['POST'])
 def read():
-    data = json.loads(request.data)
+    data: IRead = json.loads(request.data)
     table_name = data['table_name']
     filters = data['filters']
     request_id = data['request_id']
@@ -67,7 +68,7 @@ class IReadList:
 
 @crud_api.route('/read_list', methods=['POST'])
 def read_list():
-    data = json.loads(request.data)
+    data: IReadList = json.loads(request.data)
     table_name = data['table_name']
     field = data['field']
     value = data['value']
@@ -95,7 +96,7 @@ class IUpdate:
 
 @crud_api.route('/update', methods=['POST'])
 def update():
-    data = json.loads(request.data)
+    data: IUpdate = json.loads(request.data)
     table_name = data['table_name']
     key = data['key']
     value = data['value']
@@ -122,7 +123,7 @@ class IDelete:
 
 @crud_api.route('/delete', methods=['POST'])
 def delete():
-    data = json.loads(request.data)
+    data: IDelete = json.loads(request.data)
     table_name = data['table_name']
     id = data['id']
     request_id = data['request_id']
