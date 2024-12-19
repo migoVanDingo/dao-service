@@ -1,5 +1,5 @@
 import traceback
-from flask import Blueprint, current_app, json, request
+from flask import Blueprint, current_app, json, jsonify, request
 
 from dao.dao import DAO
 from utility.error import ThrowError
@@ -32,7 +32,7 @@ def create():
     try:
         dao = DAO()
         response = dao.insert(service, table_name, data=payload)
-        return response, 200
+        return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
         raise ThrowError("Failed to create record", 500)
@@ -55,7 +55,7 @@ def read():
     try:
         dao = DAO()
         response = dao.read(table_name, filters)
-        return response, 200
+        return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
         raise ThrowError("Failed to read record", 500)
@@ -80,7 +80,7 @@ def read_list():
     try:
         dao = DAO()
         response = dao.read_list(table_name, field, value)
-        return response, 200
+        return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
         raise ThrowError("Failed to read list", 500)
@@ -109,7 +109,7 @@ def update():
     try:
         dao = DAO()
         response = dao.update(table_name, key, value, data['data'])
-        return response, 200
+        return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
         raise ThrowError("Failed to update record", 500)
@@ -134,7 +134,7 @@ def delete():
     try:
         dao = DAO()
         response = dao.delete(table_name, Utils.get_id_field(service), id)
-        return response, 200
+        return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
         raise ThrowError("Failed to delete record", 500)
