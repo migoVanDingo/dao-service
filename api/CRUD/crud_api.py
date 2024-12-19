@@ -108,7 +108,7 @@ def update():
 
     try:
         dao = DAO()
-        response = dao.update(table_name, key, value, data)
+        response = dao.update(table_name, key, value, data['data'])
         return response, 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
