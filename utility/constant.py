@@ -1,16 +1,18 @@
 class Constant:
     @staticmethod
-    def get_service_prefix(service_id: str) -> str:
+    def get_table_prefix(table: str) -> str:
         prefixes = {
-            "datastore-management-service": "DSMS",
+            "datastore": "DSTR",
+            "dataset": "DSET"
             
         }
-        return prefixes[service_id]
+        return prefixes[table]
     
     @staticmethod
-    def get_service_id(service_prefix: str) -> str:
-        services = {
-            "datastore-management-service": "datastore_id"
+    def get_table_id(table: str) -> str:
+        tables = {
+            "datastore": "datastore_id",
+            "dataset": "dataset_id"
             
         }
-        return services[service_prefix]
+        return tables[table]

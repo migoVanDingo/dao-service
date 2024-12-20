@@ -18,15 +18,15 @@ class DAO:
             database=self.app.config['MYSQL_DB']
         )
 
-    def insert(self, service: str, table_name: str, data: dict):
+    def insert(self, table_name: str, data: dict):
         """ Insert data into a table """
-        data[f"{Utils.get_id_field(service)}"] = Utils.generate_id(service)
+        data[f"{Utils.get_id_field(table_name)}"] = Utils.generate_id(table_name)
 
         columns = ', '.join(data.keys())
         values = ', '.join(['%s'] * len(data))  # Prepare for parameterized query
         sql = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
 
-        current_app.logger.info(f"INSERT: {sql}")
+        # current_app.logger.info(f"INSERT: {sql}")
         
         conn = self.get_db_connection()
         cursor = conn.cursor()
@@ -59,8 +59,8 @@ class DAO:
         """ Get all records based on a field and its value """
         conditions = ' AND '.join([f"{key} = %s" for key in filters.keys()])
         sql = f"SELECT * FROM {table_name} WHERE {conditions}"
-        current_app.logger.info(f"READ LIST QUERY: {sql}")
-        current_app.logger.info(f"READ LIST FILTERS: {filters.values()}")
+        # current_app.logger.info(f"READ LIST QUERY: {sql}")
+        # current_app.logger.info(f"READ LIST FILTERS: {filters.values()}")
         conn = self.get_db_connection()
         cursor = conn.cursor(dictionary=True)  # Use dictionary cursor for readable results
         cursor.execute(sql, tuple(filters.values()))
@@ -89,7 +89,7 @@ class DAO:
 
     def delete(self, table_name, key, value):
         """ Delete a record from a table based on key-value pair (soft delete) """
-        sql = f"UPDATE {table_name} SET is_active = 0 WHERE {key} = %s"
+        sql = f"UPDATE {table_name} SET is_active = 0 WHERE {key} = %s AND is_active = 1"
         
         conn = self.get_db_connection()
         cursor = conn.cursor()

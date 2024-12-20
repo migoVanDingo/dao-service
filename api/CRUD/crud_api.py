@@ -31,7 +31,7 @@ def create():
     current_app.logger.info(f"service: {service} --- table_name: {table_name} --- payload: {payload} --- request_id: {request_id}")
     try:
         dao = DAO()
-        response = dao.insert(service, table_name, data=payload)
+        response = dao.insert(table_name, data=payload)
         return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
