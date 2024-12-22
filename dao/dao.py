@@ -26,7 +26,8 @@ class DAO:
         values = ', '.join(['%s'] * len(data))  # Prepare for parameterized query
         sql = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
 
-        # current_app.logger.info(f"INSERT: {sql}")
+        current_app.logger.info(f"INSERT: {sql}")
+        current_app.logger.info(f"INSERT DATA: {data}")
         
         conn = self.get_db_connection()
         cursor = conn.cursor()
