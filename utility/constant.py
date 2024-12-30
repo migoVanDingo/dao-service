@@ -4,7 +4,8 @@ class Constant:
         prefixes = {
             "datastore": "DSTR",
             "dataset": "DSET",
-            "files": "FILE"
+            "files": "FILE",
+            "project": "PROJ"
             
         }
         return prefixes[table]
@@ -14,7 +15,8 @@ class Constant:
         tables = {
             "datastore": "datastore_id",
             "dataset": "dataset_id",
-            "files": "file_id"
+            "files": "file_id",
+            "project": "project_id"
             
         }
         return tables[table]
