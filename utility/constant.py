@@ -5,7 +5,8 @@ class Constant:
             "datastore": "DSTR",
             "dataset": "DSET",
             "files": "FILE",
-            "project": "PROJ"
+            "project": "PROJ",
+            "project_git_info": "PGIT"
             
         }
         return prefixes[table]
@@ -16,7 +17,8 @@ class Constant:
             "datastore": "datastore_id",
             "dataset": "dataset_id",
             "files": "file_id",
-            "project": "project_id"
+            "project": "project_id",
+            "project_git_info": "project_git_info_id"
             
         }
         return tables[table]
