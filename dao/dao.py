@@ -70,9 +70,9 @@ class DAO:
         conn.close()
         return results
     
-    def read_all(self, table_name):
+    def read_all(self, query):
         """ Get all records from a table """
-        sql = f"SELECT * FROM {table_name}"
+        sql = query
         
         conn = self.get_db_connection()
         cursor = conn.cursor(dictionary=True)
