@@ -69,6 +69,18 @@ class DAO:
         cursor.close()
         conn.close()
         return results
+    
+    def read_all(self, table_name):
+        """ Get all records from a table """
+        sql = f"SELECT * FROM {table_name}"
+        
+        conn = self.get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return results
 
     def update(self, table_name, key, value, data):
         """ Update a record in a table based on key-value pair """

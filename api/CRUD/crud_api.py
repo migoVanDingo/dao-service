@@ -137,6 +137,21 @@ def delete():
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
         raise ThrowError("Failed to delete record", 500)
+    
+
+@crud_api.route('/read_all', methods=['GET'])
+def read_all():
+    args = request.args.to_dict()
+    table_name = args.get('table')
+    request_id = "READ_ALL"
+    try:
+        dao = DAO()
+        response = dao.read_all(table_name)
+        return jsonify({"response":response}), 200
+    except Exception as e:
+        current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
+        raise ThrowError("Failed to read all records", 500)
+    
 
 
 
