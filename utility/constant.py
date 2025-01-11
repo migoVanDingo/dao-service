@@ -4,6 +4,7 @@ class Constant:
         prefixes = {
             "datastore": "DST",
             "datastore_roles": "DSRO",
+            "datastore_config": "DSCF",
             "dataset": "DAT",
             "dataset_roles": "DTRO",
             "files": "FILE",
@@ -23,6 +24,7 @@ class Constant:
         tables = {
             "datastore": "datastore_id",
             "datastore_roles": "datastore_roles_id",
+            "datastore_config": "datastore_config_id",
             "dataset": "dataset_id",
             "dataset_roles": "dataset_roles_id",
             "files": "file_id",

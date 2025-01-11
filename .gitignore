@@ -2,3 +2,4 @@
 .env
 record.log
 *.pyc
+tables/aolme_videos.sql
