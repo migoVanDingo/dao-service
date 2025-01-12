@@ -20,15 +20,17 @@ class DAO:
 
     def insert(self, table_name: str, data: dict):
         """ Insert data into a table """
-        data[f"{Utils.get_id_field(table_name)}"] = Utils.generate_id(table_name)
+        data[f"{Utils.get_id_field(table_name)}"] = Utils.generate_id(
+            table_name)
 
         columns = ', '.join(data.keys())
-        values = ', '.join(['%s'] * len(data))  # Prepare for parameterized query
+        # Prepare for parameterized query
+        values = ', '.join(['%s'] * len(data))
         sql = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
 
         current_app.logger.info(f"INSERT: {sql}")
         current_app.logger.info(f"INSERT DATA: {data}")
-        
+
         conn = self.get_db_connection()
         cursor = conn.cursor()
         try:
@@ -43,37 +45,53 @@ class DAO:
             cursor.close()
             conn.close()
 
+
     def read(self, table_name, filters):
         """ Get a record from a table based on multiple search fields (filters) """
         conditions = ' AND '.join([f"{key} = %s" for key in filters.keys()])
         sql = f"SELECT * FROM {table_name} WHERE {conditions}"
 
         conn = self.get_db_connection()
-        cursor = conn.cursor(dictionary=True)  # Use dictionary cursor for readable results
-        cursor.execute(sql, tuple(filters.values()))
-        result = cursor.fetchone()  # Use fetchall() for multiple results
-        cursor.close()
-        conn.close()
-        return result
+        # Use dictionary cursor for readable results
+        cursor = conn.cursor(dictionary=True)
+
+        try:
+            cursor.execute(sql, tuple(filters.values()))
+            result = cursor.fetchone()  # Fetch one row
+            cursor.fetchall()  # Consume the remaining rows, if any
+            return result
+        except Exception as e:
+            print(f"Error during read operation: {e}")
+            raise
+        finally:
+            cursor.close()
+            conn.close()
 
     def read_list(self, table_name, filters):
-        """ Get all records based on a field and its value """
+        """
+        Get multiple records from a table based on multiple search fields (filters).
+        """
         conditions = ' AND '.join([f"{key} = %s" for key in filters.keys()])
         sql = f"SELECT * FROM {table_name} WHERE {conditions}"
-        # current_app.logger.info(f"READ LIST QUERY: {sql}")
-        # current_app.logger.info(f"READ LIST FILTERS: {filters.values()}")
+
         conn = self.get_db_connection()
         cursor = conn.cursor(dictionary=True)  # Use dictionary cursor for readable results
-        cursor.execute(sql, tuple(filters.values()))
-        results = cursor.fetchall()  # Fetch all rows
-        cursor.close()
-        conn.close()
-        return results
-    
+
+        try:
+            cursor.execute(sql, tuple(filters.values()))
+            results = cursor.fetchall()  # Fetch all matching rows
+            return results
+        except Exception as e:
+            print(f"Error during read_list operation: {e}")
+            raise  # Re-raise the exception to let the caller handle it
+        finally:
+            cursor.close()
+            conn.close()
+
     def read_all(self, query):
         """ Get all records from a table """
         sql = query
-        
+
         conn = self.get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute(sql)
@@ -86,7 +104,7 @@ class DAO:
         """ Update a record in a table based on key-value pair """
         set_clause = ', '.join([f"{column} = %s" for column in data.keys()])
         sql = f"UPDATE {table_name} SET {set_clause} WHERE {key} = %s"
-        
+
         conn = self.get_db_connection()
         cursor = conn.cursor()
         try:
@@ -103,7 +121,7 @@ class DAO:
     def delete(self, table_name, key, value):
         """ Delete a record from a table based on key-value pair (soft delete) """
         sql = f"UPDATE {table_name} SET is_active = 0 WHERE {key} = %s AND is_active = 1"
-        
+
         conn = self.get_db_connection()
         cursor = conn.cursor()
         try:
