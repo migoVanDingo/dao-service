@@ -1,6 +1,7 @@
 import logging
 import os
-from flask import Flask, jsonify, make_response, request
+import uuid
+from flask import Flask, g, jsonify, make_response, request
 from flask_cors import CORS
 import mysql.connector  # Import mysql.connector
 from dotenv import load_dotenv
@@ -51,6 +52,9 @@ def handle_options():
         response.headers['Access-Control-Allow-Origin'] = '*'
         response.headers['Content-Type'] = '*'
         return response
+    else:
+        request_id = str(uuid.uuid4())
+        g.request_id = request_id
 
 @app.errorhandler(ThrowError)
 def handle_throw_error(error):

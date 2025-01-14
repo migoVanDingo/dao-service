@@ -139,13 +139,16 @@ def delete():
         raise ThrowError("Failed to delete record", 500)
     
 
-@crud_api.route('/read_all', methods=['POST'])
-def read_all():
+@crud_api.route('/query', methods=['POST'])
+def run_query():
     data = json.loads(request.data)
-    request_id = "READ_ALL"
+    request_id = data['request_id']
+    service = data['service']
+    query = data['query']
+    current_app.logger.info(f"{request_id} --- {__name__} --- SERVICE: {service} --- QUERY: {query}")
     try:
         dao = DAO()
-        response = dao.read_all(data['query'])
+        response = dao.read_all(query)
         return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")

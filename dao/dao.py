@@ -89,16 +89,27 @@ class DAO:
             conn.close()
 
     def read_all(self, query):
-        """ Get all records from a table """
-        sql = query
-
-        conn = self.get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        return results
+        """
+        Get all records from a table based on a query.
+        """
+        conn = None
+        cursor = None
+        try:
+            conn = self.get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute(query)
+            results = cursor.fetchall()
+            return results
+        except Exception as e:
+            # Log the exception here if needed
+            current_app.logger.error(f"Error in read_all: {e}")
+            raise  # Re-raise the exception to propagate it further
+        finally:
+            # Ensure resources are released properly
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
 
     def update(self, table_name, key, value, data):
         """ Update a record in a table based on key-value pair """
