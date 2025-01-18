@@ -16,6 +16,8 @@ class Constant:
             "user": "USER",
             "team": "TEAM",
             "team_roles": "TMRO",
+            "jobs": "JOB",
+            "job_tasks": "TASK"
 
             
         }
@@ -38,6 +40,8 @@ class Constant:
             "user": "user_id",
             "team": "team_id",
             "team_roles": "team_roles_id",
+            "jobs": "job_id",
+            "job_tasks": "task_id"
             
         }
         return tables[table]
