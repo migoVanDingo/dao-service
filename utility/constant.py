@@ -11,13 +11,17 @@ class Constant:
             "dataset_files": "DTFI",
             "files": "FILE",
             "project": "PROJ",
-            "project_roles": "PJRO",
+            "project_roles": "PRJRO",
             "project_git_info": "PGIT",
             "user": "USER",
+            "user_registration": "USRG",
+            "user_roles": "USRO",
             "team": "TEAM",
             "team_roles": "TMRO",
             "jobs": "JOB",
-            "job_tasks": "TASK"
+            "job_tasks": "TASK",
+            "label_project": "LBLP",
+            "user_session": "SESS",
 
             
         }
@@ -38,10 +42,14 @@ class Constant:
             "project_roles": "project_roles_id",
             "project_git_info": "project_git_info_id",
             "user": "user_id",
+            "user_registration": "user_registration_id",
+            "user_roles": "user_role_id",
             "team": "team_id",
             "team_roles": "team_roles_id",
             "jobs": "job_id",
-            "job_tasks": "task_id"
+            "job_tasks": "task_id",
+            "label_project": "label_project_id",
+            "user_session": "session_id",
             
         }
         return tables[table]

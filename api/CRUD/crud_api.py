@@ -35,7 +35,7 @@ def create():
         return jsonify({"response":response}), 200
     except Exception as e:
         current_app.logger.error(f"{request_id} --- {__name__} --- {traceback.format_exc()} --- ERROR: {e}")
-        raise ThrowError("Failed to create record", 500)
+        raise ThrowError(f"Failed to create record --- {str(e)} --- ", 500)
     
 class IRead:
     table_name: str
