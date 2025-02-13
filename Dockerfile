@@ -6,6 +6,13 @@ WORKDIR /app
 # Copy the current directory contents into the container
 COPY . /app
 
+RUN apt-get update && apt-get install -y \
+    cmake \
+    g++ \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+
 # Install the required Python packages
 RUN pip install --no-cache-dir -r requirements.txt
 
