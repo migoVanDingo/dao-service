@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 import uuid
 from flask import Flask, g, jsonify, make_response, request
 from flask_cors import CORS
@@ -11,6 +12,7 @@ from api.CRUD.crud_api import crud_api
 from utility.error import ThrowError
 
 
+logging.Formatter.converter = time.localtime
 logging.basicConfig(filename='record.log',
                 level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(lineno)d | \n %(message)-20s')
 

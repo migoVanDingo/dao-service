@@ -1,5 +1,6 @@
 from flask import current_app
 import mysql.connector
+from mysql.connector.pooling import MySQLConnectionPool
 from utility.utils import Utils
 
 
@@ -8,15 +9,18 @@ class DAO:
         # Removed db reference, now using direct connection management
         from app import app  # Assuming app instance is created in app.py
         self.app = app
-
-    def get_db_connection(self):
-        """ Returns a database connection object """
-        return mysql.connector.connect(
+        self.pool = MySQLConnectionPool(
+            pool_name="mypool",
+            pool_size=15,
             host=self.app.config['MYSQL_HOST'],
             user=self.app.config['MYSQL_USER'],
             password=self.app.config['MYSQL_PASSWORD'],
             database=self.app.config['MYSQL_DB']
         )
+
+    def get_db_connection(self):
+        """ Returns a database connection object from the pool """
+        return self.pool.get_connection()
 
     def insert(self, table_name: str, data: dict):
         """ Insert data into a table """
